@@ -7,7 +7,12 @@ defmodule ChordProtocol do
       {:ok, id} = GenServer.start_link(__MODULE__, [])
       id
     end)
-
+    Enum.each(nodes, fn(node)->
+      successor = find_successor(node, nodes)
+      update_successor(node, successor)
+      node_finger_table = populate_finger_table(get_node_id(node), M, nodes)
+      update_finger_table(node, node_finger_table)
+    end)
     IO.inspect(nodes)
   end
 
@@ -33,7 +38,7 @@ defmodule ChordProtocol do
     total_nodes = Enum.count(nodes)
     nextIndex = if index+1 < total_nodes do index+1 else 0
     successor = Enum.fetch(nodes, nextIndex)
-    successor 
+    successor
   end
   def find_neighbour(value, all_nodes) do
     next = Enum.reduce(all_nodes, nil, fn nodes, pointer ->
@@ -68,8 +73,10 @@ defmodule ChordProtocol do
     {:reply, id, state}
   end
 
-  def init([]) do
+  def init([m]) do
     node_id = :crypto.hash(:sha, self()) |> Base.encode16
+    node_id = Integer.parse(node_id)
+    node_id = rem(node_id, :math.pow(2, m))
     {:ok, {node_id, nil, []}}
   end
 end
