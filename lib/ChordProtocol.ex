@@ -33,6 +33,8 @@ defmodule ChordProtocol do
   def single_query(node, key) do
     finger_table = get_finger_table(node)
     node_key = get_node_id(node)
+    IO.puts("Que")
+    # IO.puts(Enum.count(finger_table))
     IO.inspect(finger_table)
     if node_key==key do
       IO.puts "Key Found"
@@ -73,6 +75,8 @@ defmodule ChordProtocol do
       successor = find_successor(node, nodes)
       update_successor(node, successor)
       node_finger_table = populate_finger_table(get_node_id(node), m, nodes)
+      IO.puts("Finger Table Updating")
+      IO.inspect(node_finger_table)
       update_finger_table(node, node_finger_table)
     end)
   end
@@ -88,8 +92,9 @@ defmodule ChordProtocol do
   def populate_finger_table(n, m, all_nodes) do
     finger_table_size = 1..m
     finger_table  = Enum.reduce(finger_table_size, [], fn i, table ->
-      value = n + i |> rem(trunc(:math.pow(2, m)))
+      value = n + trunc(:math.pow(2, i)) |> rem(trunc(:math.pow(2, m)))
       table ++ [find_neighbour(value, all_nodes)]
+      # IO.inspect(table)
     end)
     finger_table
   end
@@ -110,6 +115,8 @@ defmodule ChordProtocol do
           pointer
         end
     end)
+    IO.puts("next")
+    IO.inspect(next)
     next
   end
 
@@ -134,18 +141,22 @@ defmodule ChordProtocol do
   end
 
   def handle_call({:updateFingerTable, table}, _from, state) do
-    {id, _, next} = state
-    state = {id, table, next}
+    {id, next, _} = state
+    state = {id, next, table}
     {:reply, id, state}
   end
 
   def handle_call({:getNodeId}, _from, state) do
     {id, _,_} = state
+    # IO.puts("1")
+    # IO.inspect(id)
     {:reply, id, state}
   end
 
   def handle_call({:getFingerTable}, _from, state) do
     {_, _, finger_table} = state
+    IO.puts("Finger")
+    IO.inspect(finger_table)
     {:reply, finger_table, state}
   end
 
