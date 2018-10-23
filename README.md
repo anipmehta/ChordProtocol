@@ -62,5 +62,10 @@ Number of Peers 	   Number of Requests      Average number of Hops
 1024                        3                        11
 2024                        3                        12
 ```
+Here is the graph:
+
+![graph](https://user-images.githubusercontent.com/4914264/47330096-0634a100-d645-11e8-87f1-caffdf8b36e3.png)
+
+It can be observed that the graph is logarithmic.
 
  
