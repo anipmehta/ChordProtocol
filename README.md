@@ -50,6 +50,7 @@ Number of Peers 	   Number of Requests      Average number of Hops
 
 Keeping the number of requests constant(=3),the graph of average number of hops to the number of peers was plotted.
 
+```
 Number of Peers 	   Number of Requests      Average number of Hops   	   
 --------------------------------------------------------------------
 8                           3                        4         
@@ -60,6 +61,6 @@ Number of Peers 	   Number of Requests      Average number of Hops
 700                         3                        10 
 1024                        3                        11
 2024                        3                        12
-
+```
 
  
