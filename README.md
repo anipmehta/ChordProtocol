@@ -62,10 +62,22 @@ Number of Peers 	   Number of Requests      Average number of Hops
 1024                        3                        11
 2024                        3                        12
 ```
-Here is the graph:
+It can be observed that the graph is logarithmic:
 
 ![graph](https://user-images.githubusercontent.com/4914264/47330096-0634a100-d645-11e8-87f1-caffdf8b36e3.png)
 
-It can be observed that the graph is logarithmic.
+What is the largest network you managed to deal with?
 
+The largest network we managed to deal with consisted of 5000 nodes. Beyond that, it was taking too much time to build the chord topology and update the finger table.
+
+## Input
+
+Syntax:
+ - mix run proj3.ex (number of nodes) (number of requests)
+ 
+ Example:
+ - ``mix run proj3.ex 100 5``
+
+## Output
+ - Avrage number of hops to be traversed to deliver a message
  
