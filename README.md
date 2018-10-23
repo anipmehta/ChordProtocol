@@ -33,7 +33,7 @@ be found at [https://hexdocs.pm/proj3](https://hexdocs.pm/proj3).
   
 ```
 Number of Peers 	   Number of Requests      Average number of Hops   	   
-------------------------------------------------------------------
+--------------------------------------------------------------------
 8                           2                         3          
 8                           3                         3           
 8                           4                         5            
@@ -47,4 +47,19 @@ Number of Peers 	   Number of Requests      Average number of Hops
 1024                        5                         12 
 1024                        10                        13 
 ```
+
+Keeping the number of requests constant(=3),the graph of average number of hops to the number of peers was plotted.
+
+Number of Peers 	   Number of Requests      Average number of Hops   	   
+--------------------------------------------------------------------
+8                           3                        4         
+50                          3                        6          
+100                         3                        7           
+200                         3                        8           
+500                         3                        9  
+700                         3                        10 
+1024                        3                        11
+2024                        3                        12
+
+
  
