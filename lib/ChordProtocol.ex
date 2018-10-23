@@ -9,20 +9,16 @@ defmodule ChordProtocol do
     :ets.insert(counter, {"found", 0})
     hop_counter = :ets.new(:hop_counter, [:named_table, :public])
     :ets.insert(hop_counter, {"hop_counter", 0})
-    # IO.inspect(num_requests)
     nodes = Enum.map((1..number_of_peer), fn(id) ->
       {:ok, id} = GenServer.start_link(__MODULE__, [m])
       id
     end)
-    # IO.inspect("unsorted")
-    # IO.inspect(nodes)
     nodes = Enum.sort(nodes, fn(x,y)->
       get_node_id(x)<get_node_id(y)
     end)
-    # IO.inspect("sorted")
-    # IO.inspect(nodes)
     build_chord_topology(nodes, m)
     IO.puts("Chord built")
+    IO.puts("Sending queries")
     query_chord(nodes, num_requests, m)
     # recurse()
   end
@@ -35,37 +31,22 @@ defmodule ChordProtocol do
     Enum.each(nodes, fn(node)->
       Enum.each((1..requests), fn(i)->
         random_key = get_destination_key(get_random_hash(), m, nodes)
-        # IO.puts("adwedw")
-        # IO.inspect(random_key)
         Task.start(ChordProtocol, :single_query, [node, random_key, nodes, requests])
       end)
     end)
   end
 
-  # def start_protocol(node, destination) do
-  #   GenServer.callback()
-  # end
-
   def single_query(node, key, nodes, requests) do
     finger_table = get_finger_table(node)
     node_key = get_node_id(node)
-    # IO.puts("Que")
-    # IO.inspect(key)
-    # IO.inspect(node_key)
-    # IO.puts(Enum.count(finger_table))
-    # IO.inspect(node)
-    # IO.inspect(finger_table)
     total_nodes = Enum.count(nodes)
     if node_key==key do
       found_counter = :ets.update_counter(:counter, "found", 1, {1,0})
-      # hop_count = :ets.update_counter(:hop_counter, "hop_counter", 1, {1,0})
-      # IO.puts("counter")
-      # IO.inspect(found_counter)
       if found_counter == Enum.count(nodes)*requests do
         hop_count = :ets.update_counter(:hop_counter, "hop_counter", 1, {1,0})
         avg_hops = trunc(div(hop_count, total_nodes*requests))
         avg_hops = avg_hops + trunc(:math.log2(requests))
-        IO.puts("Average Hops" <> Integer.to_string(avg_hops))
+        IO.puts("Average Hops: " <> Integer.to_string(avg_hops))
         System.halt(0)
       end
       # IO.puts("counter")
@@ -126,12 +107,8 @@ defmodule ChordProtocol do
     IO.puts("Building Chord.....")
     Enum.each(nodes, fn(node)->
       successor = find_successor(node, nodes)
-      # IO.puts("succ")
-      # IO.inspect(successor)
       update_successor(node, successor)
       node_finger_table = populate_finger_table(get_node_id(node), m, nodes)
-      # IO.puts("Finger Table Updating")
-      # IO.inspect(node_finger_table)
       update_finger_table(node, node_finger_table)
     end)
   end
