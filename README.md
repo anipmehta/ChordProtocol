@@ -79,5 +79,5 @@ Syntax:
  - ``mix run proj3.ex 100 5``
 
 ## Output
- - Avrage number of hops to be traversed to deliver a message
+ - Average number of hops to be traversed to deliver a message
  
